@@ -51,10 +51,10 @@ mount_partitions(){
 	mount /dev/sda1 /mnt/boot
 	lsblk
 }
-#最小安装
+#最小安装（efi引导的话，将grub改成grub-efi-x86_64 efibootmgr）
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl networkmanager networkmanager-openconnect rp-pppoe net-tools vim grub screenfetch gitxorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub zsh screenfetch gitxorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
 }
 
 #生成标卷文件表
@@ -74,6 +74,30 @@ configure_system(){
 	arch_chroot "locale-gen"
 	echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
 }
+
+#安装驱动程序
+configrue_drive(){
+	print_title "configrue_drive"
+	arch_chroot "pacman -S --noconfirm bluez"
+        arch_chroot "systemctl enable bumblebeed"
+        arch_chroot "pacman -S --noconfirm xf86-video-nouveau -y"        
+}
+
+#安装网络管理程序
+configrue_networkmanager(){
+	print_title "configrue_networkmanager"
+  	arch_chroot "pacman -S --noconfirm networkmanager networkmanager-openconnect rp-pppoe network-manager-applet net-tools -y"
+        arch_chroot "systemctl enable NetworkManager.service"      
+}
+
+#安装配置引导程序
+configrue_bootloader(){
+	print_title "configrue_bootloader"
+	arch_chroot "grub-install --target=i386-pc /dev/sda"
+       #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
+        arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg" 
+}
+
 
 #添加本地域名
 configure_hostname(){
@@ -97,27 +121,15 @@ configure_hostname(){
 	arch_chroot "sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts"
 
 	arch_chroot "sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts"
-
-}
-
-#安装配置引导程序
-configrue_bootloader(){
-	print_title "configrue_bootloader"
-	arch_chroot "grub-install --target=i386-pc /dev/sda"
-       #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
-        arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
-}
-
-#安装驱动程序
-configrue_drive(){
-	print_title "configrue_drive"
-	arch_chroot "pacman -S --noconfirm bluez"
-        arch_chroot "systemctl enable bumblebeed"
-        arch_chroot "pacman -S --noconfirm xf86-video-nouveau -y" 
-        umount -R /mnt
+	
+	umount -R /mnt
+	
 	clear
+	
 	print_title "install has been.please reboot ."
+
 }
+
 
 
 update_mirrorlist
@@ -127,7 +139,8 @@ mount_partitions
 install_baseSystem
 generate_fstab
 configure_system
-configure_hostname
-configrue_bootloader
 configrue_drive
+configrue_networkmanager
+configrue_bootloader
+configure_hostname
 
