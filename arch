@@ -103,7 +103,7 @@ configure_hostname(){
 configrue_bootloader(){
 	print_title "configrue_bootloader"
 	arch_chroot "grub-install --target=i386-pc /dev/sda"
-        #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
+       #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
         arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 }
 #安装驱动程序
@@ -126,3 +126,4 @@ generate_fstab
 configure_system
 configure_hostname
 configrue_bootloader
+configrue_drive
