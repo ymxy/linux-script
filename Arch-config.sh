@@ -240,7 +240,7 @@ install_desktop(){
     select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
         case $DESKTOP in
             "KDE")
-                pacman -S kf5 kf5-aids plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
+                pacman -S kf5 kf5-aids plasma kdebase kdegraphics kde-l10n-zh_cn sddm
                 systemctl enable sddm
                 break
             ;;
