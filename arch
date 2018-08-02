@@ -94,7 +94,7 @@ configure_hostname(){
 
 	fi
 
-        passwd $host_name
+        passwd 
 
 	arch_chroot "sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts"
 
