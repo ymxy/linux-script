@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git
+	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git zsh sudo 
 }
 
 #生成标卷文件表
@@ -80,9 +80,9 @@ configure_hostname(){
 
 	print_title "configure_hostname"
 
-	read -p "Hostname [ex: archlinux]: " Dazhi
+	read -p "Hostname [ex: archlinux]: " host_name
 
-	echo "$Dazhi" > /mnt/etc/hostname
+	echo "$host_name" > /mnt/etc/hostname
 
 	if [[ ! -f /mnt/etc/hosts.aui ]]; then
 
@@ -94,11 +94,24 @@ configure_hostname(){
 
 	fi
 
-	arch_chroot "sed -i '/127.0.0.1/s/$/ '${Dazhi}'/' /etc/hosts"
+        passwd $host_name
 
-	arch_chroot "sed -i '/::1/s/$/ '${Dazhi}'/' /etc/hosts"
+	arch_chroot "sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts"
+
+	arch_chroot "sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts"
 
 }
+
+#添加用户名
+configure_user(){
+	print_title "configure_user"
+	read -p "User [ex: archlinux]: " user
+	arch_chroot "useradd -m -g users -G wheel -s /bin/zsh $user"
+	arch_chroot "passwd $user"
+	arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers"
+	arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
+}
+
 #安装配置引导程序
 configrue_bootloader(){
 	print_title "configrue_bootloader"
@@ -109,9 +122,9 @@ configrue_bootloader(){
 #安装驱动程序
 configrue_drive(){
 	print_title "configrue_drive"
-	arch_chroot "pacman -S bumblebee"
+	arch_chroot "pacman -S bumblebee -y"
        arch_chroot "systemctl enable bumblebeed"
-       arch_chroot "pacman -S xf86-video-nouveau " 
+       arch_chroot "pacman -S xf86-video-nouveau -y" 
        umount -R /mnt
 	clear
 	print_title "install has been.please reboot ."
@@ -125,5 +138,6 @@ install_baseSystem
 generate_fstab
 configure_system
 configure_hostname
+configure_user
 configrue_bootloader
 configrue_drive
