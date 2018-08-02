@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git zsh  
+	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git networkmanager networkmanager-openconnect rp-pppoe xorg-server xf86-input-synaptics firefox wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
 }
 
 #生成标卷文件表
@@ -107,29 +107,13 @@ configrue_bootloader(){
       #arch_chroot "grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=boot" (efi引导)
        arch_chroot "grub-mkconfig -o /boot/grub/grub.cfg"
 }
+
 #安装驱动程序
 configrue_drive(){
 	print_title "configrue_drive"
-	arch_chroot "pacman -S bumblebee -y"
+	arch_chroot "pacman -S --noconfirm bluez"
        arch_chroot "systemctl enable bumblebeed"
-       arch_chroot "pacman -S xf86-video-nouveau -y" 
-}
-
-#安装软件和图形界面
-configrue_app(){
-	print_title "configrue_app"
-        arch_chroot "sed -i '/archlinuxcn/d' /etc/pacman.conf"
-	arch_chroot "sed -i '/archlinux-cn/d' /etc/pacman.conf"
-        echo -e "[archlinuxcn]\nServer = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf 
-       arch_chroot "pacman.conf"
-       arch_chroot "pacman -Sy"
-       arch_chroot "pacman -Sy"
-       arch_chroot "pacman -S archlinuxcn-keyring"
-       arch_chroot "pacman -S aurman"
-       arch_chroot "pacman -S pacman -S networkmanager networkmanager-openconnect rp-pppoe xorg-server xf86-input-synaptics firefox wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts -y"
-       umount -R /mnt
-	clear
-	print_title "install has been.please reboot ."
+       arch_chroot "pacman -S --noconfirm xf86-video-nouveau -y" 
 }
 
 update_mirrorlist
@@ -140,7 +124,6 @@ install_baseSystem
 generate_fstab
 configure_system
 configure_hostname
-configure_user
 configrue_bootloader
 configrue_drive
-configrue_app
+
