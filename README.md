@@ -8,7 +8,7 @@
 连接好网络后执行
 ```
 wget raw.githubusercontent.com/ymxy/linux-script/master/arch.sh
-bash Arch.sh
+bash arch.sh
 ```
 ### 使用及脚本安装完后续步骤：
 添加本地域名密码
