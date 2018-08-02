@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装（efi引导的话，将grub改成grub-efi-x86_64 efibootmgr）
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub zsh screenfetch git xorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git xorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
 }
 
 #生成标卷文件表
