@@ -110,8 +110,8 @@ configrue_bootloader(){
 configrue_drive(){
 	print_title "configrue_drive"
 	arch_chroot "pacman -S bumblebee"
-        arch_chroot "systemctl enable bumblebeed"
-        arch_chroot "pacman -S xf86-video-nouveau " 
+       arch_chroot "systemctl enable bumblebeed"
+       arch_chroot "pacman -S xf86-video-nouveau " 
         umount -R /mnt
 	clear
 	print_title "install has been.please reboot ."
