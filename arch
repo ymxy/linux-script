@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git zsh sudo 
+	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git zsh  
 }
 
 #生成标卷文件表
@@ -94,22 +94,10 @@ configure_hostname(){
 
 	fi
 
-        passwd 
-
 	arch_chroot "sed -i '/127.0.0.1/s/$/ '${host_name}'/' /etc/hosts"
 
 	arch_chroot "sed -i '/::1/s/$/ '${host_name}'/' /etc/hosts"
 
-}
-
-#添加用户名
-configure_user(){
-	print_title "configure_user"
-	read -p "User [ex: archlinux]: " user
-	arch_chroot "useradd -m -g users -G wheel -s /bin/zsh $user"
-	arch_chroot "passwd $user"
-	arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers"
-	arch_chroot "sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers"
 }
 
 #安装配置引导程序
@@ -125,6 +113,20 @@ configrue_drive(){
 	arch_chroot "pacman -S bumblebee -y"
        arch_chroot "systemctl enable bumblebeed"
        arch_chroot "pacman -S xf86-video-nouveau -y" 
+}
+
+#安装软件和图形界面
+configrue_app(){
+	print_title "configrue_app"
+        arch_chroot "sed -i '/archlinuxcn/d' /etc/pacman.conf"
+	arch_chroot "sed -i '/archlinux-cn/d' /etc/pacman.conf"
+        echo -e "[archlinuxcn]\nServer = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf 
+       arch_chroot "pacman.conf"
+       arch_chroot "pacman -Sy"
+       arch_chroot "pacman -Sy"
+       arch_chroot "pacman -S archlinuxcn-keyring"
+       arch_chroot "pacman -S aurman"
+       arch_chroot "pacman -S pacman -S networkmanager networkmanager-openconnect rp-pppoe xorg-server xf86-input-synaptics firefox wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts -y"
        umount -R /mnt
 	clear
 	print_title "install has been.please reboot ."
@@ -141,3 +143,4 @@ configure_hostname
 configure_user
 configrue_bootloader
 configrue_drive
+configrue_app
