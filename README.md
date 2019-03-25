@@ -11,6 +11,10 @@ wget raw.githubusercontent.com/ymxy/linux-script/master/arch.sh
 bash arch.sh
 ```
 ### 使用及脚本安装完后续步骤：
+双系统需要下载双系统引导程序
+```
+$ pacman -S os-prober grub-bios
+```
 添加本地域名密码
 ```
 $ passwd
