@@ -31,7 +31,7 @@ create_partitions(){
 	parted -s /dev/sda mklabel msdos
 	parted -s /dev/sda mkpart primary ext4 1M 525M
 	parted -s /dev/sda mkpart primary linux-swap 525M 4800M
-	parted -s /dev/sda mkpart primary ext4 4800M 777777M
+	parted -s /dev/sda mkpart primary ext4 4800M 100%
 	parted -s /dev/sda set 1 boot on
 	parted -s /dev/sda print
 }
