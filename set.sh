@@ -53,9 +53,9 @@ configure_system(){
 #安装驱动程序
 configrue_drive(){
 	print_title "configrue_drive"
-	arch_chroot "pacman -S --noconfirm bluez"
+	arch_chroot "pacman -S --noconfirm bumblebee -y"
         arch_chroot "systemctl enable bumblebeed"
-        arch_chroot "pacman -S --noconfirm xf86-video-nouveau -y"        
+        arch_chroot "pacman -S --noconfirm nvidia -y"        
 }
 
 #安装网络管理程序
