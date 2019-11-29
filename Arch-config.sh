@@ -228,7 +228,7 @@ install_app(){
             cd ..
             rm -rf package-query aurman"
         fi
-    pacman -S --noconfirm networkmanager networkmanager-openconnect rp-pppoe xorg-server xf86-input-synaptics firefox wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts
+    pacman -S --noconfirm networkmanager networkmanager-openconnect rp-pppoe xorg-server xorg-twm xorg-xclock xterm xorg-xint xf86-input-synaptics firefox wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts
     systemctl enable NetworkManager
     if [ "$GPU" == "Intel and Nvidia" ];then
         gpasswd -a $USER bumblebee
@@ -265,8 +265,8 @@ install_desktop(){
                 break
             ;;
             "Xfce")
-                pacman -S xfce4 xfce4-goodies xfce4-terminal lightdm lightdm-gtk-greeter
-                systemctl enable lightdm
+                pacman -S xfce4 xfce4-goodies deepin-terminal sddm
+                systemctl enable sddm
                 break
             ;;
             "Deepin")
