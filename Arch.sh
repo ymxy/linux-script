@@ -139,7 +139,7 @@ install(){
     sed -i 's/^#Server/Server/g' ${tmpfile}
     mv -f ${tmpfile} /etc/pacman.d/mirrorlist;
     pacman -Syy
-    pacstrap /mnt base base-devel --force
+    pacstrap /mnt base linux linux-firmware --force
     genfstab -U -p /mnt > /mnt/etc/fstab
 }
 config(){
