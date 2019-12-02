@@ -265,7 +265,7 @@ install_desktop(){
                 break
             ;;
             "Xfce")
-                pacman -S xfce4 xfce4-goodies deepin-terminal sddm
+                pacman -S xfce4 xfce4-goodies sddm
                 systemctl enable sddm
                 break
             ;;
