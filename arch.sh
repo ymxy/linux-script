@@ -54,7 +54,7 @@ mount_partitions(){
 #最小安装（efi引导的话，将grub改成grub-efi-x86_64 efibootmgr）
 install_baseSystem(){
 	print_title "install_baseSystem"
-	pacstrap /mnt base base-devel iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git xorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
+     	pacstrap /mnt base linux linux-firmware iw wireless_tools wpa_supplicant dialog netctl vim grub screenfetch git xorg-server xorg-twm xorg-xclock xorg-server xf86-input-synaptics  wqy-zenhei ttf-dejavu wqy-microhei adobe-source-code-pro-fonts   
 }
 
 #生成标卷文件表
@@ -78,9 +78,9 @@ configure_system(){
 #安装驱动程序
 configrue_drive(){
 	print_title "configrue_drive"
-	arch_chroot "pacman -S --noconfirm bluez"
+	arch_chroot "pacman -S --noconfirm bumblebee"
         arch_chroot "systemctl enable bumblebeed"
-        arch_chroot "pacman -S --noconfirm xf86-video-nouveau -y"        
+        arch_chroot "pacman -S --noconfirm nvidia -y"        
 }
 
 #安装网络管理程序
